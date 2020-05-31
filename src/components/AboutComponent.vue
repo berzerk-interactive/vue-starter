@@ -8,11 +8,26 @@
       <b>Prop 'number' of the AboutComponent:</b>
       {{ number }}
     </p>
+    <span v-html="rawHtml"></span>
     <div class="buttons">
       <button v-on:click="showMessage">v-on:click example</button>
       <button @click="showMessage">@click example</button>
     </div>
-    <span v-html="rawHtml"></span>
+    <div>
+      <label>Insert text here:</label>
+      <!-- v-model is used for 2-way data binding;
+          key changing is the most efficient way to force re-render in Vue js 
+      -->
+      <input type="text" v-model="inputContent" />
+      <p class="blue">
+        <b>inputContent is</b>
+        {{ inputContent }}
+      </p>
+    </div>
+    <div class="rerender">
+      <input :key="inputKey" type="text" value="Test the re-render!" />
+      <button @click="forceRerender">Re-render the input!</button>
+    </div>
   </div>
 </template>
 
@@ -25,12 +40,19 @@ export default {
   data() {
     return {
       rawHtml: '<p style="font-size:18px;color:red;">v-html is cool!</p>',
-      number: 10
+      number: 10,
+      inputKey: 0,
+      inputContent: "First"
     };
   },
   methods: {
     showMessage() {
       alert("Hello!");
+    },
+
+    forceRerender() {
+      console.log("rerender");
+      this.inputKey += 1;
     }
   }
 };
@@ -38,11 +60,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-p {
-  margin: 30px 0;
+div,
+p,
+span {
+  margin: 20px 0;
 }
 button {
   margin: 10px 0;
+}
+
+label {
+  color: black;
 }
 
 .about-component {
@@ -51,7 +79,12 @@ button {
   padding: 15px;
 }
 
-.buttons {
+.buttons,
+.rerender {
   display: inline-grid;
+}
+
+.blue {
+  color: blue;
 }
 </style>
